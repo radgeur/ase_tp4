@@ -64,8 +64,7 @@ dump(unsigned char *buffer,
 }
 
 
-static void
-empty_it()
+static void empty_it()
 {
   return;
 }
@@ -79,8 +78,7 @@ void chk_hda(){
     assert(sectorsize==SECTORSIZE);
 }
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     unsigned int i;
     unsigned int c,s;
@@ -91,13 +89,13 @@ main(int argc, char **argv)
 	fprintf(stderr, "Error in hardware initialization\n");
 	exit(EXIT_FAILURE);
     }
-
+    
     /* Interreupt handlers */
     for(i=0; i<16; i++)
 	IRQVECTOR[i] = empty_it;
 
     /* Allows all IT */
-    _mask(0);
+    _mask(1);
     chk_hda();
     
     dmps(c,s);
@@ -106,13 +104,14 @@ main(int argc, char **argv)
     exit(EXIT_SUCCESS);
 }
 
+
 void dmps (int cylinder, int sector){
 
     /*Move the cursor */
     _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
     _out(HDA_DATAREGS+1,cylinder & 0xFF);
     _out(HDA_DATAREGS+2,(sector>>8) & 0xFF);
-    _out(HDA_DATAREGS +3,sector & 0xFF);
+    _out(HDA_DATAREGS+3,sector & 0xFF);
     _out(HDA_CMDREG,CMD_SEEK);
     _sleep(HDA_IRQ);
 
