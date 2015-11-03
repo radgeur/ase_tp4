@@ -10,63 +10,12 @@
    
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
-#include "hardware.h"
 #include <assert.h>
-#define SECTORSIZE 256
-#define HDA_CMDREG 0x3F6
-#define HDA_DATAREGS 0x110
-#define HDA_IRQ 14
+#include "drive.h"
 
 
-/* dump buffer to stdout,
-   and octal dump if octal_dump; an ascii dump if ascii_dump! */
-static void
-dump(unsigned char *buffer,
-     unsigned int buffer_size,
-     int ascii_dump,
-     int octal_dump) 
-{
-    int i,j;
-    
-    for (i=0; i<buffer_size; i+=16) {
-	/* offset */
-	printf("%.8o",i);
-
-	/* octal dump */
-	if (octal_dump) {
-	    for(j=0; j<8; j++)
-		printf(" %.2x", buffer[i+j]);
-	    printf(" - ");
-	    
-	    for( ; j<16; j++)
-		printf(" %.2x", buffer[i+j]);
-	    
-	    printf("\n");
-	}
-	/* ascii dump */
-	if (ascii_dump) {
-	    printf("%8c", ' ');
-	    
-	    for(j=0; j<8; j++)
-		printf(" %1c ", isprint(buffer[i+j])?buffer[i+j]:' ');
-	    printf(" - ");
-	    
-	    for( ; j<16; j++)
-		printf(" %1c ", isprint(buffer[i+j])?buffer[i+j]:' ');
-	    
-	    printf("\n");
-	}
-	
-    }
-}
-
-
-static void empty_it()
-{
-  return;
+static void empty_it(){
+    return;
 }
 
 void dmps();
@@ -99,9 +48,11 @@ int main(int argc, char **argv)
     _mask(1);
     chk_hda();
 
+
+
     dmps(c,s);
-    /*frmt();
-      dmps(c,s);*/
+    frmt();
+    dmps(c,s);
 
     /* and exit! */
     exit(EXIT_SUCCESS);

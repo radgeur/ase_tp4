@@ -26,8 +26,11 @@ all: $(BINARIES) $(OBJECTS)
 mkhd.o: mkhd.c
 	$(CC) $(CFLAGS) -c mkhd.c $(INCDIR)
 
-mkhd: mkhd.o 
-	$(CC) $(CFLAGS) -o mkhd  mkhd.o $(LIBS)
+mkhd: mkhd.o drive.o
+	$(CC) $(CFLAGS) -o mkhd  mkhd.o drive.o $(LIBS)
+
+drive.o: drive.c
+	$(CC) $(CFLAGS) -c drive.c $(INCDIR)
 
 ###------------------------------
 ### Misc.
