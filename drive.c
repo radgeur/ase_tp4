@@ -18,7 +18,24 @@ void read_sector(unsigned int cylinder, unsigned int sector, unsigned char *buff
 
 }
 
-void write_sector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer){}
+void write_sector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer){
+    /*Move the cursor*/
+    _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
+    _out(HDA_DATAREGS+1,cylinder & 0xFF);
+    _out(HDA_DATAREGS+2,(sector>>8) & 0xFF);
+    _out(HDA_DATAREGS+3,sector & 0xFF);
+    _out(HDA_CMDREG,CMD_SEEK);
+    _sleep(HDA_IRQ);
+
+    memcpy(MASTERBUFFER,buffer,SECTORSIZE);
+    
+    /*Write on the sector*/
+    _out(HDA_DATAREGS,0);
+    _out(HDA_DATAREGS+1,1);
+    _out(HDA_CMDREG,CMD_WRITE);
+    _sleep(HDA_IRQ);
+    
+}
 
 void format_sector(unsigned int cylinder, unsigned int sector, unsigned int value){}
 
