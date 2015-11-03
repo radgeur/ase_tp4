@@ -70,6 +70,7 @@ static void empty_it()
 }
 
 void dmps();
+void frmt();
 
 void chk_hda(){
     int sectorsize;
@@ -82,8 +83,8 @@ int main(int argc, char **argv)
 {
     unsigned int i;
     unsigned int c,s;
-    c=1;
-    s=42;
+    c=0;
+    s=0;
     /* init hardware */
     if(init_hardware("hardware.ini") == 0) {
 	fprintf(stderr, "Error in hardware initialization\n");
@@ -97,8 +98,10 @@ int main(int argc, char **argv)
     /* Allows all IT */
     _mask(1);
     chk_hda();
-    
+
     dmps(c,s);
+    /*frmt();
+      dmps(c,s);*/
 
     /* and exit! */
     exit(EXIT_SUCCESS);
@@ -124,4 +127,22 @@ void dmps (int cylinder, int sector){
     /*Print the sector*/
     dump(MASTERBUFFER,SECTORSIZE,1,0);
   
+}
+
+/*not finished*/
+void frmt () {
+    /*catch the number of sectors*/
+    int nbSector;
+    _out(HDA_CMDREG,CMD_DSKINFO);
+    nbSector = (_in(HDA_DATAREGS+2)<<8) + _in(HDA_DATAREGS+3);
+
+    /*format the disk*/
+    _out(HDA_DATAREGS,(nbSector>>8) & 0xFF);
+    _out(HDA_DATAREGS+1, nbSector & 0xFF);
+    _out(HDA_DATAREGS+2,0>>24 & 0xFF);
+    _out(HDA_DATAREGS+3, 0>>16 & 0xFF);
+    _out(HDA_DATAREGS+4,0>>8 & 0xFF);
+    _out(HDA_DATAREGS+5, 0 & 0xFF);
+    _out(HDA_CMDREG,CMD_FORMAT);
+    _sleep(HDA_IRQ);
 }
