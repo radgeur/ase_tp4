@@ -52,13 +52,12 @@ int main(int argc, char **argv)
 
     dmps(c,s);
     frmt();
-    dmps(c,s);
 
     /* and exit! */
     exit(EXIT_SUCCESS);
 }
 
-
+/*print the content of a sector*/
 void dmps (int cylinder, int sector){
 
     /*Move the cursor */
@@ -80,20 +79,24 @@ void dmps (int cylinder, int sector){
   
 }
 
-/*not finished*/
+/*format all the disk*/
 void frmt () {
     /*catch the number of sectors*/
-    int nbSector;
+  int nbSector, i;
     _out(HDA_CMDREG,CMD_DSKINFO);
     nbSector = (_in(HDA_DATAREGS+2)<<8) + _in(HDA_DATAREGS+3);
+    printf("%i\n", nbSector);
 
-    /*format the disk*/
-    _out(HDA_DATAREGS,(nbSector>>8) & 0xFF);
-    _out(HDA_DATAREGS+1, nbSector & 0xFF);
-    _out(HDA_DATAREGS+2,0>>24 & 0xFF);
-    _out(HDA_DATAREGS+3, 0>>16 & 0xFF);
-    _out(HDA_DATAREGS+4,0>>8 & 0xFF);
-    _out(HDA_DATAREGS+5, 0 & 0xFF);
-    _out(HDA_CMDREG,CMD_FORMAT);
-    _sleep(HDA_IRQ);
+    for (i=0;i<nbSector;i++){
+      /*format one sector of the disk*/
+      printf("%i\n", i);
+      _out(HDA_DATAREGS,(nbSector>>8) & 0xFF);
+      _out(HDA_DATAREGS+1, nbSector & 0xFF);
+      _out(HDA_DATAREGS+2,0>>24 & 0xFF);
+      _out(HDA_DATAREGS+3, 0>>16 & 0xFF);
+      _out(HDA_DATAREGS+4,0>>8 & 0xFF);
+      _out(HDA_DATAREGS+5, 0 & 0xFF);
+      _out(HDA_CMDREG,CMD_FORMAT);
+      _sleep(HDA_IRQ);
+    }
 }
