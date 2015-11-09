@@ -49,9 +49,12 @@ int main(int argc, char **argv)
     chk_hda();
 
 
+    /*read the first sector and format the disk*/
+    /*dmps(c,s);
+      frmt();*/
 
-    dmps(c,s);
-    frmt();
+    /* use of the functions about the sector in drive.c*/
+    
 
     /* and exit! */
     exit(EXIT_SUCCESS);
@@ -82,16 +85,14 @@ void dmps (int cylinder, int sector){
 /*format all the disk*/
 void frmt () {
     /*catch the number of sectors*/
-  int nbSector, i;
+    int nbSector, i;
     _out(HDA_CMDREG,CMD_DSKINFO);
     nbSector = (_in(HDA_DATAREGS+2)<<8) + _in(HDA_DATAREGS+3);
-    printf("%i\n", nbSector);
 
     for (i=0;i<nbSector;i++){
       /*format one sector of the disk*/
-      printf("%i\n", i);
-      _out(HDA_DATAREGS,(nbSector>>8) & 0xFF);
-      _out(HDA_DATAREGS+1, nbSector & 0xFF);
+      _out(HDA_DATAREGS,(1>>8) & 0xFF);
+      _out(HDA_DATAREGS+1, 1 & 0xFF);
       _out(HDA_DATAREGS+2,0>>24 & 0xFF);
       _out(HDA_DATAREGS+3, 0>>16 & 0xFF);
       _out(HDA_DATAREGS+4,0>>8 & 0xFF);
