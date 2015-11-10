@@ -3,4 +3,6 @@ TP4
 LAMBERT Natacha
 LEPRERE Rémy
 
-codage de drive.c, fonctions read et write finis
+TP5 et 6 fusionnés
+
+TP5 finis, TP6 écrit mais pas encore testé
