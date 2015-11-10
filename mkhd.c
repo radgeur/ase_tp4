@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 {
     unsigned int i;
     unsigned int c,s;
+    unsigned char buf[SECTORSIZE];
     c=0;
     s=0;
     /* init hardware */
@@ -52,8 +53,19 @@ int main(int argc, char **argv)
     /*read the first sector and format the disk*/
     /*dmps(c,s);
       frmt();*/
-
+    
     /* use of the functions about the sector in drive.c*/
+    printf("Lecture du secteur 0\n");
+    read_sector(c,s,buf);
+    dump(buf,SECTORSIZE,1,0);
+    printf("Affichage du secteur 1 reecrit\n");
+    write_sector(c,1,buf);
+    read_sector(c,1,buf);
+    dump(buf,SECTORSIZE,1,0);
+    printf("Affichage du secteur 2 formate \n");
+    format_sector(c,2,0);
+    read_sector(c,2,buf);
+    dump(buf,SECTORSIZE,1,0);
     
 
     /* and exit! */

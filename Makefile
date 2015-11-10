@@ -1,11 +1,11 @@
 # $Id: Makefile,v 1.2 2004/10/12 09:06:17 marquet Exp $
 ##############################################################################
 
-ROOTDIR=/home/radgeur/Documents/M1/ASE/ase_tp4/libhardware-linux-x86-64-r103
+ROOTDIR=/home/enseign/ASE
 
 CC	= gcc
 CFLAGS	= -Wall -ansi -pedantic 
-CFLAGS  += -g
+CFLAGS  += -g -m32
 LIBDIR  = $(ROOTDIR)/lib
 INCDIR  = -I$(ROOTDIR)/include
 LIBS    = -L$(LIBDIR) -lhardware 
