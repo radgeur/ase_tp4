@@ -38,8 +38,8 @@ mbr.o: mbr.c
 mkvol.o: mkvol.c
 	$(CC) $(CFLAGS) -c mkvol.c $(INCDIR)
 
-mkvol: mkvol.o mbr.o
-	$(CC) $(CFLAGS) -o mkvol  mkvol.o mbr.o $(LIBS)
+mkvol: mkvol.o mbr.o drive.o
+	$(CC) $(CFLAGS) -o mkvol  mkvol.o mbr.o drive.o $(LIBS)
 ###------------------------------
 ### Misc.
 ###------------------------------------------------------------

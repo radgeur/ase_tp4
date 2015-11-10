@@ -21,7 +21,7 @@ int main(){
 	exit(EXIT_FAILURE);
     }
     
-    /* Interreupt handlers */
+    /* Interrupt handlers */
     for(i=0; i<16; i++)
 	IRQVECTOR[i] = empty_it;
 

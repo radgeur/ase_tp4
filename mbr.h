@@ -1,11 +1,7 @@
 #ifndef _MBR_
 #define _MBR_
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <assert.h>
-#include <ctype.h>
-#include <string.h>
 #include "drive.h"
 
 #define MAXVOL 5
