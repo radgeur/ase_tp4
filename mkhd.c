@@ -51,11 +51,11 @@ int main(int argc, char **argv)
 
 
     /*read the first sector and format the disk*/
-    /*dmps(c,s);
-      frmt();*/
+    dmps(c,s);
+    frmt();
     
     /* use of the functions about the sector in drive.c*/
-    printf("Lecture du secteur 0\n");
+    /*printf("Lecture du secteur 0\n");
     read_sector(c,s,buf);
     dump(buf,SECTORSIZE,1,0);
     printf("Affichage du secteur 1 reecrit\n");
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     printf("Affichage du secteur 2 formate \n");
     format_sector(c,2,0);
     read_sector(c,2,buf);
-    dump(buf,SECTORSIZE,1,0);
+    dump(buf,SECTORSIZE,1,0);*/
     
 
     /* and exit! */
@@ -95,21 +95,24 @@ void dmps (int cylinder, int sector){
 }
 
 /*format all the disk*/
-void frmt () {
-    /*catch the number of sectors*/
-    int nbSector, i;
+void frmt () {    
+    /*catch the number of sectors and cylinders*/
+    int nbSector, nbCylinder,i,j;
     _out(HDA_CMDREG,CMD_DSKINFO);
     nbSector = (_in(HDA_DATAREGS+2)<<8) + _in(HDA_DATAREGS+3);
-
-    for (i=0;i<nbSector;i++){
-      /*format one sector of the disk*/
-      _out(HDA_DATAREGS,(1>>8) & 0xFF);
-      _out(HDA_DATAREGS+1, 1 & 0xFF);
-      _out(HDA_DATAREGS+2,0>>24 & 0xFF);
-      _out(HDA_DATAREGS+3, 0>>16 & 0xFF);
-      _out(HDA_DATAREGS+4,0>>8 & 0xFF);
-      _out(HDA_DATAREGS+5, 0 & 0xFF);
-      _out(HDA_CMDREG,CMD_FORMAT);
-      _sleep(HDA_IRQ);
+    nbCylinder = (_in(HDA_DATAREGS)<<8) + _in(HDA_DATAREGS+1);
+    
+    for(j=0;j<nbCylinder;j++){
+	for (i=0;i<nbSector;i++){
+	    /*format one sector of the disk*/
+	    _out(HDA_DATAREGS,(1>>8) & 0xFF);
+	    _out(HDA_DATAREGS+1, 1 & 0xFF);
+	    _out(HDA_DATAREGS+2,0>>24 & 0xFF);
+	    _out(HDA_DATAREGS+3, 0>>16 & 0xFF);
+	    _out(HDA_DATAREGS+4,0>>8 & 0xFF);
+	    _out(HDA_DATAREGS+5, 0 & 0xFF);
+	    _out(HDA_CMDREG,CMD_FORMAT);
+	    _sleep(HDA_IRQ);
+	}
     }
 }

@@ -4,10 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <ctype.h>
+#include <string.h>
 #include "drive.h"
 
-#define MAXVOL = 5
-#define MBR_MAGIC = 0xCAFEBABE
+#define MAXVOL 5
+#define MBR_MAGIC 0xCAFEBABE
+#define NBSECTORPERCYLINDER 16
+
+static struct mbr_s mbr;
 
 enum vol_type_e {STD, ANX, OTHER};
 
@@ -18,13 +23,14 @@ struct vol_s {
   enum vol_type_e type;
 };
 
-struct MBR_s{
+struct mbr_s{
 	struct vol_s mbr_vol[MAXVOL];
 	unsigned mbr_nb_vol;
 	unsigned mbr_magic;	
 };
 
-extern int load_mbr(); 
+extern int load_mbr();
+extern void save_mbr();
 extern int sector_of_bloc(unsigned int vol, unsigned int nbloc);
 extern int cylinder_of_bloc(unsigned int vol, unsigned int nbloc);
 extern void read_bloc(unsigned int vol, unsigned int nbloc, unsigned char *buffer);

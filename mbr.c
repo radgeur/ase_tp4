@@ -1,10 +1,11 @@
 #include "mbr.h"
 
+/*Initialize the mbr*/
 int load_mbr(){
-    char buffer[SECTORSIZE];
+    unsigned char buffer[SECTORSIZE];
     assert(SECTORSIZE>=sizeof(struct mbr_s));
     read_sector(0,0,buffer);
-    memcopy(&mbr,buffer,sizeof(struct mbr_s));
+    memcpy(&mbr,buffer,sizeof(struct mbr_s));
     if(mbr.mbr_magic!= MBR_MAGIC){
 	mbr.mbr_nb_vol = 0;
 	mbr.mbr_magic = MBR_MAGIC;
@@ -13,30 +14,54 @@ int load_mbr(){
     return 1;
 }
 
+/*Save the mbr*/
+void save_mbr(){
+    unsigned char buffer[SECTORSIZE];
+    memcpy(buffer,&mbr,sizeof(struct mbr_s));
+    write_bloc(0,0,buffer);
+}
+
+
+/*Return the sector number of a bloc*/
 int sector_of_bloc(unsigned int vol, unsigned int nbbloc){
     unsigned int s;
     s=(mbr.mbr_vol[vol].vol_first_sector+nbbloc)%NBSECTORPERCYLINDER;
     return s;
 }
 
+/*Return the cylinder number of a bloc*/
 int cylinder_of_bloc(unsigned int vol, unsigned int nbbloc) {
     unsigned int c;
     c=(mbr.mbr_vol[vol].vol_first_cylinder + (mbr.mbr_vol[vol].vol_first_sector+nbbloc))%NBSECTORPERCYLINDER;
     return c;
 }
 
+/*Read a bloc*/
 void read_bloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer){
+    int c,s;
     assert(MAXVOL>vol);
     /*assert()*/;
-    int c=cylinder_of_bloc(vol,nbloc);
-    int s=sector_of_bloc(vol,nbloc);
+    c=cylinder_of_bloc(vol,nbbloc);
+    s=sector_of_bloc(vol,nbbloc);
     read_sector(c,s,buffer);
 }
 
+/*Write on a bloc*/
 void write_bloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer){
+    int c,s;
     assert(MAXVOL>vol);
     /*assert()*/
-    int c=cylinder_of_bloc(vol,nbloc);
-    int s=sector_of_bloc(vol,nbloc);
+    c=cylinder_of_bloc(vol,nbbloc);
+    s=sector_of_bloc(vol,nbbloc);
     write_sector(c,s,buffer);
+}
+
+/*Format a volume*/
+void format_vol(unsigned int vol){
+    unsigned nbbloc;
+    int c,s;
+    nbbloc = mbr.mbr_vol[vol].vol_nb_bloc;
+    c=cylinder_of_bloc(vol,nbbloc);
+    s=sector_of_bloc(vol,nbbloc);
+    format_sector(c,s,0);
 }

@@ -13,7 +13,7 @@ LIBS    = -L$(LIBDIR) -lhardware
 ###------------------------------
 ### Main targets 
 ###------------------------------------------------------------
-BINARIES= mkhd 
+BINARIES= mkhd mkvol
 OBJECTS	= $(addsuffix .o,\
 	  mkhd)
 
@@ -32,6 +32,14 @@ mkhd: mkhd.o drive.o
 drive.o: drive.c
 	$(CC) $(CFLAGS) -c drive.c $(INCDIR)
 
+mbr.o: mbr.c
+	$(CC) $(CFLAGS) -c mbr.c $(INCDIR)
+
+mkvol.o: mkvol.c
+	$(CC) $(CFLAGS) -c mkvol.c $(INCDIR)
+
+mkvol: mkvol.o mbr.o
+	$(CC) $(CFLAGS) -o mkvol  mkvol.o mbr.o $(LIBS)
 ###------------------------------
 ### Misc.
 ###------------------------------------------------------------
