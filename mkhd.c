@@ -32,7 +32,6 @@ int main(int argc, char **argv)
 {
     unsigned int i;
     unsigned int c,s;
-    unsigned char buf[SECTORSIZE];
     c=0;
     s=0;
     /* init hardware */
@@ -50,11 +49,10 @@ int main(int argc, char **argv)
     chk_hda();
 
 
-    /*read the first sector and format the disk*/
+    /*read a sector and print it and format the disk*/
     dmps(c,s);
     frmt();
     
-    /* use of the functions about the sector in drive.c*/
     /*printf("Lecture du secteur 0\n");
     read_sector(c,s,buf);
     dump(buf,SECTORSIZE,1,0);
@@ -74,28 +72,17 @@ int main(int argc, char **argv)
 
 /*print the content of a sector*/
 void dmps (int cylinder, int sector){
+    unsigned char buf[SECTORSIZE];
 
-    /*Move the cursor */
-    _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
-    _out(HDA_DATAREGS+1,cylinder & 0xFF);
-    _out(HDA_DATAREGS+2,(sector>>8) & 0xFF);
-    _out(HDA_DATAREGS+3,sector & 0xFF);
-    _out(HDA_CMDREG,CMD_SEEK);
-    _sleep(HDA_IRQ);
-
-    /*Read the sector*/
-    _out(HDA_DATAREGS,0);
-    _out(HDA_DATAREGS+1,1);
-    _out(HDA_CMDREG,CMD_READ);
-    _sleep(HDA_IRQ);
+    read_sector(cylinder, sector, buf);
 
     /*Print the sector*/
-    dump(MASTERBUFFER,SECTORSIZE,1,0);
-  
+    dump(buf,SECTORSIZE,1,0);
 }
+  
 
 /*format all the disk*/
-void frmt () {    
+void frmt () {
     /*catch the number of sectors and cylinders*/
     int nbSector, nbCylinder,i,j;
     _out(HDA_CMDREG,CMD_DSKINFO);
@@ -104,7 +91,7 @@ void frmt () {
     
     for(j=0;j<nbCylinder;j++){
 	for (i=0;i<nbSector;i++){
-	    /*format one sector of the disk*/
+	  /*format one sector of the disk
 	    _out(HDA_DATAREGS,(1>>8) & 0xFF);
 	    _out(HDA_DATAREGS+1, 1 & 0xFF);
 	    _out(HDA_DATAREGS+2,0>>24 & 0xFF);
@@ -112,7 +99,8 @@ void frmt () {
 	    _out(HDA_DATAREGS+4,0>>8 & 0xFF);
 	    _out(HDA_DATAREGS+5, 0 & 0xFF);
 	    _out(HDA_CMDREG,CMD_FORMAT);
-	    _sleep(HDA_IRQ);
+	    _sleep(HDA_IRQ);*/
+	  format_sector(j,i,0);
 	}
     }
 }

@@ -14,6 +14,8 @@ void read_sector(unsigned int cylinder, unsigned int sector, unsigned char *buff
     _out(HDA_DATAREGS+1,1);
     _out(HDA_CMDREG,CMD_READ);
     _sleep(HDA_IRQ);
+
+    /*copy the content of MASTERBUFFER in buffer*/
     memcpy(buffer,MASTERBUFFER,SECTORSIZE);
 
 }
@@ -27,6 +29,7 @@ void write_sector(unsigned int cylinder, unsigned int sector, const unsigned cha
     _out(HDA_CMDREG,CMD_SEEK);
     _sleep(HDA_IRQ);
 
+    /*copy the content of MASTERBUFFER in buffer*/
     memcpy(MASTERBUFFER,buffer,SECTORSIZE);
     
     /*Write on the sector*/
@@ -49,21 +52,17 @@ void format_sector(unsigned int cylinder, unsigned int sector, unsigned int valu
     /*format the sector*/
     _out(HDA_DATAREGS,(1>>8) & 0xFF);
     _out(HDA_DATAREGS+1, 1 & 0xFF);
-    _out(HDA_DATAREGS+2,0>>24 & 0xFF);
-    _out(HDA_DATAREGS+3, 0>>16 & 0xFF);
-    _out(HDA_DATAREGS+4,0>>8 & 0xFF);
-    _out(HDA_DATAREGS+5, 0 & 0xFF);
+    _out(HDA_DATAREGS+2,value>>24 & 0xFF);
+    _out(HDA_DATAREGS+3, value>>16 & 0xFF);
+    _out(HDA_DATAREGS+4,value>>8 & 0xFF);
+    _out(HDA_DATAREGS+5, value & 0xFF);
     _out(HDA_CMDREG,CMD_FORMAT);
     _sleep(HDA_IRQ);
 }
 
 /* dump buffer to stdout,
    and octal dump if octal_dump; an ascii dump if ascii_dump! */
-void dump(unsigned char *buffer,
-	  unsigned int buffer_size,
-	  int ascii_dump,
-	  int octal_dump) 
-{
+void dump(unsigned char *buffer, unsigned int buffer_size, int ascii_dump,  int octal_dump) {
     int i,j;
     
     for (i=0; i<buffer_size; i+=16) {
