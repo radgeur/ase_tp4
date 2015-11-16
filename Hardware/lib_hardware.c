@@ -1,3 +1,5 @@
+#include "lib_hardware.h"
+
 /*format all the disk*/
 void frmt () {
     /*catch the number of sectors and cylinders*/

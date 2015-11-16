@@ -32,8 +32,8 @@ mkhd: mkhd.o drive.o lib_hardware.o
 drive.o: drive.c
 	$(CC) $(CFLAGS) -c drive.c $(INCDIR)
 
-lib_hardware.o: lib_hardware.c drive.o
-	$(CC) $(CFLAGS) -c lib_hardware.c drive.o $(INCDIR)
+lib_hardware.o: lib_hardware.c
+	$(CC) $(CFLAGS) -c lib_hardware.c $(INCDIR)
 
 ###------------------------------
 ### Misc.
