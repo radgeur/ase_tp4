@@ -13,9 +13,9 @@ void chk_hda(){
 }
 
 void dvol();
+void mbrvol(unsigned nbblocs, unsigned firstCylinder, unsigned firstSector);
 
 int main(){
-  struct vol_s vol, vol2;
     int i;
     /* init hardware */
     if(init_hardware("hardware.ini") == 0) {
@@ -31,24 +31,9 @@ int main(){
     _mask(1);
     chk_hda();
 
-    
-    /*load_mbr();*/
-    vol.vol_first_sector=1;
-    vol.vol_first_cylinder=0;
-    vol.vol_nb_bloc=4;
-    vol.type=STD;
-    mbr.mbr_vol[mbr.mbr_nb_vol]=vol;
-    mbr.mbr_nb_vol++;
-    mbr.mbr_magic=MBR_MAGIC;
-    vol2.vol_first_sector=1;
-    vol2.vol_first_cylinder=0;
-    vol2.vol_nb_bloc=4;
-    vol2.type=STD;
-    mbr.mbr_vol[mbr.mbr_nb_vol]=vol2;
-    mbr.mbr_nb_vol++;
-    mbr.mbr_magic=MBR_MAGIC;
+    mbrvol(4,1,7);
+    mbrvol(12,4,24);
     dvol();
-    /*save_mbr();*/
     exit(EXIT_SUCCESS);
 }
 
@@ -59,6 +44,19 @@ void dvol(){
   nb_vol = mbr.mbr_nb_vol;
   printf("%i volumes\n", nb_vol);
   for (i=0;i<nb_vol;i++){
-    printf("vol %i  (%i,%i)  %i blocs\n",i, mbr.mbr_vol[i].vol_first_sector, mbr.mbr_vol[i].vol_first_cylinder, mbr.mbr_vol[i].vol_nb_bloc);
+    printf("vol %i  (%i,%i)  %i blocs\n",i, mbr.mbr_vol[i].vol_first_cylinder, mbr.mbr_vol[i].vol_first_sector, mbr.mbr_vol[i].vol_nb_bloc);
   }
+}
+
+/*create a new volume*/
+void mbrvol(unsigned nbblocs, unsigned firstCylinder, unsigned firstSector){
+  struct vol_s vol;
+  load_mbr();
+  vol.vol_first_sector=firstSector;
+  vol.vol_first_cylinder=firstCylinder;
+  vol.vol_nb_bloc=nbblocs;
+  vol.type=STD;
+  mbr.mbr_vol[mbr.mbr_nb_vol]=vol;
+  mbr.mbr_nb_vol++;
+  save_mbr();
 }
