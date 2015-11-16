@@ -23,20 +23,3 @@ void dmps (int cylinder, int sector){
     /*Print the sector*/
     dump(buf,SECTORSIZE,1,0);
 }
-  
-
-/*format all the disk*/
-void frmt () {
-    /*catch the number of sectors and cylinders*/
-    int nbSector, nbCylinder,i,j;
-    _out(HDA_CMDREG,CMD_DSKINFO);
-    nbSector = (_in(HDA_DATAREGS+2)<<8) + _in(HDA_DATAREGS+3);
-    nbCylinder = (_in(HDA_DATAREGS)<<8) + _in(HDA_DATAREGS+1);
-    
-    /*format the disk for all sector in all cylinders*/
-    for(j=0;j<nbCylinder;j++){
-	for (i=0;i<nbSector;i++){
-	  format_sector(j,i,0);
-	}
-    }
-}

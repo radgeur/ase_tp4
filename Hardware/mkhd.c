@@ -11,7 +11,6 @@
 */
 
 #include <assert.h>
-#include "drive.h"
 #include "lib_hardware.h"
 
 
@@ -38,7 +37,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
     }
     
-    /* Interreupt handlers */
+    /* Interrupt handlers */
     for(i=0; i<16; i++)
 	IRQVECTOR[i] = empty_it;
 
