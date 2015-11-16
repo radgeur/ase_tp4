@@ -12,8 +12,11 @@
 #define HDA_IRQ 14
 
 extern void read_sector(unsigned int cylinder, unsigned int sector, unsigned char *buffer);
+extern void read_nsector(unsigned int cylinder, unsigned int sector, unsigned char *buffer, unsigned n);
 extern void write_sector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer);
+extern void write_nsector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer, unsigned n);
 extern void format_sector(unsigned int cylinder, unsigned int sector, unsigned int value);
 extern void dump(unsigned char *buffer, unsigned int buffer_size, int ascii_dump, int octal_dump);
+
 
 #endif

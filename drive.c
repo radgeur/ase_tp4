@@ -20,6 +20,10 @@ void read_sector(unsigned int cylinder, unsigned int sector, unsigned char *buff
 
 }
 
+void read_nsector(unsigned int cylinder, unsigned int sector, unsigned char *buffer, unsigned n){
+
+}
+
 void write_sector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer){
     /*Move the cursor*/
     _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
@@ -38,6 +42,29 @@ void write_sector(unsigned int cylinder, unsigned int sector, const unsigned cha
     _out(HDA_CMDREG,CMD_WRITE);
     _sleep(HDA_IRQ);
     
+}
+
+void write_nsector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer, unsigned n){
+  int i;
+
+  /*Move the cursor*/
+  _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
+  _out(HDA_DATAREGS+1,cylinder & 0xFF);
+  _out(HDA_DATAREGS+2,(sector>>8) & 0xFF);
+  _out(HDA_DATAREGS+3,sector & 0xFF);
+  _out(HDA_CMDREG,CMD_SEEK);
+  _sleep(HDA_IRQ);
+
+  for (i=0;i<n;i++) {
+    /*copy the content of buffer in MASTERBUFFER*/
+    memcpy(MASTERBUFFER,buffer,SECTORSIZE);
+    
+    /*Write on the sector*/
+    _out(HDA_DATAREGS,0);
+    _out(HDA_DATAREGS+1,1);
+    _out(HDA_CMDREG,CMD_WRITE);
+    _sleep(HDA_IRQ);
+  }
 }
 
 void format_sector(unsigned int cylinder, unsigned int sector, unsigned int value){
