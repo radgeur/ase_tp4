@@ -8,16 +8,16 @@
 #define SUPER 0
 
 struct super_s {
-  unsigned super_first_free;
-  unsigned super_nb_free;
-  unsigned super_magic;
+  unsigned first_free;
+  unsigned nb_free;
+  unsigned magic;
 };
 
 struct super_s super;
 
 struct free_bloc_s{
-	unsigned Fb_size;
-	unsigned Fb_next;
+	unsigned size;
+	unsigned next;
 };
 
 extern void init_vol();

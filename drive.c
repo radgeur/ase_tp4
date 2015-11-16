@@ -29,7 +29,7 @@ void write_sector(unsigned int cylinder, unsigned int sector, const unsigned cha
     _out(HDA_CMDREG,CMD_SEEK);
     _sleep(HDA_IRQ);
 
-    /*copy the content of MASTERBUFFER in buffer*/
+    /*copy the content of buffer in MASTERBUFFER*/
     memcpy(MASTERBUFFER,buffer,SECTORSIZE);
     
     /*Write on the sector*/
@@ -50,8 +50,8 @@ void format_sector(unsigned int cylinder, unsigned int sector, unsigned int valu
     _sleep(HDA_IRQ);
 
     /*format the sector*/
-    _out(HDA_DATAREGS,(1>>8) & 0xFF);
-    _out(HDA_DATAREGS+1, 1 & 0xFF);
+    _out(HDA_DATAREGS, 0 );
+    _out(HDA_DATAREGS+1, 1 );
     _out(HDA_DATAREGS+2,value>>24 & 0xFF);
     _out(HDA_DATAREGS+3, value>>16 & 0xFF);
     _out(HDA_DATAREGS+4,value>>8 & 0xFF);

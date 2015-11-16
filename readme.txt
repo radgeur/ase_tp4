@@ -3,6 +3,7 @@ TP4
 LAMBERT Natacha
 LEPRERE Rémy
 
-TP5 et 6 fusionnés
+TP5, 6 et 7 fusionnés
 
-Modifier les fonctions frmt et autres qui utilisent les fonctions sector.
+read_blocn
+write_blocn

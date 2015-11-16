@@ -40,7 +40,7 @@ int cylinder_of_bloc(unsigned int vol, unsigned int nbbloc) {
 void read_bloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer){
     int c,s;
     assert(MAXVOL>vol);
-    /*assert()*/;
+    assert(mbr.mbr_vol[vol].vol_nb_bloc>=nbbloc);
     c=cylinder_of_bloc(vol,nbbloc);
     s=sector_of_bloc(vol,nbbloc);
     read_sector(c,s,buffer);
@@ -50,7 +50,7 @@ void read_bloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer){
 void write_bloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer){
     int c,s;
     assert(MAXVOL>vol);
-    /*assert()*/
+    assert(mbr.mbr_vol[vol].vol_nb_bloc>=nbbloc);
     c=cylinder_of_bloc(vol,nbbloc);
     s=sector_of_bloc(vol,nbbloc);
     write_sector(c,s,buffer);
@@ -65,3 +65,4 @@ void format_vol(unsigned int vol){
     s=sector_of_bloc(vol,nbbloc);
     format_sector(c,s,0);
 }
+

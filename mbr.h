@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "drive.h"
 
-#define MAXVOL 5
+#define MAXVOL 8
 #define MBR_MAGIC 0xCAFEBABE
 #define NBSECTORPERCYLINDER 16
 
@@ -20,9 +20,9 @@ struct vol_s {
 };
 
 struct mbr_s{
-	struct vol_s mbr_vol[MAXVOL];
-	unsigned mbr_nb_vol;
-	unsigned mbr_magic;	
+  struct vol_s mbr_vol[MAXVOL];
+  unsigned mbr_nb_vol;
+  unsigned mbr_magic;	
 };
 
 extern int load_mbr();
