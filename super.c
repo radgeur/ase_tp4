@@ -1,22 +1,22 @@
 #include "super.h"
 
-void save_vol(){
-    write_bloc(SUPER,sizeof(struct super_s), (unsigned char *) &super);
+void save_super(){
+    write_nbloc(CURRENT_VOLUME,SUPER, (unsigned char *) &super,sizeof(struct super_s));
 }
 
-void init_vol(){
+void init_super(){
     struct free_bloc_s free;
     super.first_free=1;
     super.nb_free=mbr.mbr_vol[CURRENT_VOL].vol_size -1;
     super.magic = SUPER_MAGIC;
-    write_bloc(SUPER,sizeof(struct super_s), (unsigned char *) &super);
+    write_nbloc(CURRENT_VOLUME,SUPER, (unsigned char *) &super,sizeof(struct super_s));
     free.size=super.nb_free;
     free.next=BLOC_NULL;
-    write_bloc(1,sizeof(struct free_bloc_s), (unsigned char *) &free);
+    write_nbloc(CURRENT_VOLUME,1,(unsigned char *) &free, sizeof(struct free_bloc_s));
 }
 
-int load_super(unsigned int vol){
-    return 1;
+int load_super(){
+    read_nbloc(CURRENT_VOLUME,SUPER,(unsigned char *) &super, sizeof(struct super_s));
 }
 
 unsigned int new_bloc(){
@@ -34,7 +34,7 @@ unsigned int new_bloc(){
     }
     super.first_free++;
     free.size--;
-    write_bloc(super.first_free,sizeof(struct free_bloc_s), (unsigned char *) &free);
+    write_nbloc(super.first_free,res,sizeof(struct free_bloc_s), (unsigned char *) &free);
     return res;
 }
 
