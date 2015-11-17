@@ -1,11 +1,11 @@
 # $Id: Makefile,v 1.2 2004/10/12 09:06:17 marquet Exp $
 ##############################################################################
 
-ROOTDIR=/home/radgeur/Documents/M1/ASE/ase_tp4/libhardware-linux-x86-64-r103
+ROOTDIR=/home/enseign/ASE
 
 CC	= gcc
 CFLAGS	= -Wall -ansi -pedantic 
-CFLAGS  += -g
+CFLAGS  += -g -m32
 LIBDIR  = $(ROOTDIR)/lib
 INCDIR  = -I$(ROOTDIR)/include
 LIBS    = -L$(LIBDIR) -lhardware 
@@ -41,11 +41,14 @@ lib_hardware.o: lib_hardware.c
 mkvol.o: mkvol.c
 	$(CC) $(CFLAGS) -c mkvol.c $(INCDIR)
 
-mkvol: mkvol.o drive.o mbr.o
-	$(CC) $(CFLAGS) -o mkvol  mkvol.o drive.o mbr.o $(LIBS)
+mkvol: mkvol.o drive.o mbr.o super.o
+	$(CC) $(CFLAGS) -o mkvol  mkvol.o drive.o mbr.o super.o $(LIBS)
 
 mbr.o: mbr.c
 	$(CC) $(CFLAGS) -c mbr.c $(INCDIR)
+
+super.o: super.c
+	$(CC) $(CFLAGS) -c super.c $(INCDIR)
 
 ###------------------------------
 ### Misc.

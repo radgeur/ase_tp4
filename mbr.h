@@ -30,7 +30,9 @@ extern void save_mbr();
 extern int sector_of_bloc(unsigned int vol, unsigned int nbloc);
 extern int cylinder_of_bloc(unsigned int vol, unsigned int nbloc);
 extern void read_bloc(unsigned int vol, unsigned int nbloc, unsigned char *buffer);
+extern void read_nbloc(unsigned int vol, unsigned int nbloc, unsigned char *buffer, int n);
 extern void write_bloc(unsigned int vol, unsigned int nbloc, unsigned char *buffer);
+extern void write_nbloc(unsigned int vol, unsigned int nbloc, unsigned char *buffer, int n);
 extern void format_bloc(unsigned int vol);
 
 #endif

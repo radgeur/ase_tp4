@@ -46,6 +46,16 @@ void read_bloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer){
     read_sector(c,s,buffer);
 }
 
+/*Read only n bytes of a bloc*/
+void read_nbloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer, int n){
+    int c,s;
+    assert(MAXVOL>vol);
+    assert(mbr.mbr_vol[vol].vol_nb_bloc>=nbbloc);
+    c=cylinder_of_bloc(vol,nbbloc);
+    s=sector_of_bloc(vol,nbbloc);
+    read_nsector(c,s,buffer,n);
+}
+
 /*Write on a bloc*/
 void write_bloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer){
     int c,s;
@@ -54,6 +64,16 @@ void write_bloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer){
     c=cylinder_of_bloc(vol,nbbloc);
     s=sector_of_bloc(vol,nbbloc);
     write_sector(c,s,buffer);
+}
+
+/*Write only n bytes on the bloc*/
+void write_nbloc(unsigned int vol, unsigned int nbbloc, unsigned char *buffer, int n){
+    int c,s;
+    assert(MAXVOL>vol);
+    assert(mbr.mbr_vol[vol].vol_nb_bloc>=nbbloc);
+    c=cylinder_of_bloc(vol,nbbloc);
+    s=sector_of_bloc(vol,nbbloc);
+    write_nsector(c,s,buffer,n);
 }
 
 /*Format a volume*/

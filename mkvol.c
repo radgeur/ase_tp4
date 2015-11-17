@@ -32,7 +32,7 @@ int main(){
     chk_hda();
 
     mbrvol(4,1,7);
-    mbrvol(12,4,24);
+    mbrvol(12,4,3);
     dvol();
     exit(EXIT_SUCCESS);
 }

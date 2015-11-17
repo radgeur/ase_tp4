@@ -1,5 +1,6 @@
 #include "drive.h"
 
+/*read a sector on the disk*/
 void read_sector(unsigned int cylinder, unsigned int sector, unsigned char *buffer){
     /*Move the cursor */
     _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
@@ -17,13 +18,29 @@ void read_sector(unsigned int cylinder, unsigned int sector, unsigned char *buff
 
     /*copy the content of MASTERBUFFER in buffer*/
     memcpy(buffer,MASTERBUFFER,SECTORSIZE);
-
 }
 
+/*read only n byte of a sector on the disk*/
 void read_nsector(unsigned int cylinder, unsigned int sector, unsigned char *buffer, unsigned n){
+    /*Move the cursor */
+    _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
+    _out(HDA_DATAREGS+1,cylinder & 0xFF);
+    _out(HDA_DATAREGS+2,(sector>>8) & 0xFF);
+    _out(HDA_DATAREGS+3,sector & 0xFF);
+    _out(HDA_CMDREG,CMD_SEEK);
+    _sleep(HDA_IRQ);
 
+    /*Read the sector*/
+    _out(HDA_DATAREGS,0);
+    _out(HDA_DATAREGS+1,1);
+    _out(HDA_CMDREG,CMD_READ);
+    _sleep(HDA_IRQ);
+
+    /*copy the content of MASTERBUFFER in buffer*/
+    memcpy(buffer,MASTERBUFFER,n);
 }
 
+/*write the buffer on the sector of the disk*/
 void write_sector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer){
     /*Move the cursor*/
     _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
@@ -44,31 +61,29 @@ void write_sector(unsigned int cylinder, unsigned int sector, const unsigned cha
     
 }
 
+/*write only n bytes on the sector of the disk*/
 void write_nsector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer, unsigned n){
-  int i;
+    /*Move the cursor*/
+    _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
+    _out(HDA_DATAREGS+1,cylinder & 0xFF);
+    _out(HDA_DATAREGS+2,(sector>>8) & 0xFF);
+    _out(HDA_DATAREGS+3,sector & 0xFF);
+    _out(HDA_CMDREG,CMD_SEEK);
+    _sleep(HDA_IRQ);
 
-  /*Move the cursor*/
-  _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
-  _out(HDA_DATAREGS+1,cylinder & 0xFF);
-  _out(HDA_DATAREGS+2,(sector>>8) & 0xFF);
-  _out(HDA_DATAREGS+3,sector & 0xFF);
-  _out(HDA_CMDREG,CMD_SEEK);
-  _sleep(HDA_IRQ);
-
-  for (i=0;i<n;i++) {
     /*copy the content of buffer in MASTERBUFFER*/
-    memcpy(MASTERBUFFER,buffer,SECTORSIZE);
+    memcpy(MASTERBUFFER,buffer,n);
     
     /*Write on the sector*/
     _out(HDA_DATAREGS,0);
     _out(HDA_DATAREGS+1,1);
     _out(HDA_CMDREG,CMD_WRITE);
     _sleep(HDA_IRQ);
-  }
 }
 
+/*format one sector on the disk*/
 void format_sector(unsigned int cylinder, unsigned int sector, unsigned int value){
-  /*Move the cursor*/
+    /*Move the cursor*/
     _out(HDA_DATAREGS,(cylinder>>8) & 0xFF);
     _out(HDA_DATAREGS+1,cylinder & 0xFF);
     _out(HDA_DATAREGS+2,(sector>>8) & 0xFF);
