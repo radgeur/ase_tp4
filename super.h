@@ -6,6 +6,7 @@
 #define SUPER_MAGIC 0xCAFEBABE
 #define BLOC_NULL 0
 #define SUPER 0
+#define CURRENT_VOLUME atoi(getenv("CURRENT_VOLUME"))
 
 struct super_s {
   unsigned first_free;

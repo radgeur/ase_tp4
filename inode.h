@@ -4,7 +4,7 @@
 #include "super.h"
 
 #define NDIRECT 10
-#define NBPB 4 /*BLOC_SIZE/sizeof(unsigned int)*/
+#define NBBLOCPARBLOC 4 /*BLOC_SIZE/sizeof(unsigned int)*/
 
 enum file_type_e {FILE,DIR};
 

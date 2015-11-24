@@ -41,8 +41,8 @@ lib_hardware.o: lib_hardware.c
 mkvol.o: mkvol.c
 	$(CC) $(CFLAGS) -c mkvol.c $(INCDIR)
 
-mkvol: mkvol.o drive.o mbr.o
-	$(CC) $(CFLAGS) -o mkvol  mkvol.o drive.o mbr.o $(LIBS)
+mkvol: mkvol.o drive.o mbr.o super.o inode.o
+	$(CC) $(CFLAGS) -o mkvol  mkvol.o drive.o mbr.o super.o inode.o $(LIBS)
 
 mbr.o: mbr.c
 	$(CC) $(CFLAGS) -c mbr.c $(INCDIR)

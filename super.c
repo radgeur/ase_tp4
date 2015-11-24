@@ -7,7 +7,7 @@ void save_super(){
 void init_super(){
     struct free_bloc_s free;
     super.first_free=1;
-    super.nb_free=mbr.mbr_vol[CURRENT_VOL].vol_size -1;
+    super.nb_free=mbr.mbr_vol[CURRENT_VOLUME].vol_nb_bloc -1;
     super.magic = SUPER_MAGIC;
     write_nbloc(CURRENT_VOLUME,SUPER, (unsigned char *) &super,sizeof(struct super_s));
     free.size=super.nb_free;
@@ -17,6 +17,7 @@ void init_super(){
 
 int load_super(){
     read_nbloc(CURRENT_VOLUME,SUPER,(unsigned char *) &super, sizeof(struct super_s));
+    return 1;
 }
 
 unsigned int new_bloc(){
@@ -25,28 +26,31 @@ unsigned int new_bloc(){
     if(super.nb_free==0){
 	return BLOC_NULL;
     }
-    read_bloc(super.first_free,sizeof(struct free_bloc_s), (unsigned char *) &free);
-    res=super.first_free;
-    super.nb_free--;
+    read_nbloc(CURRENT_VOLUME,super.first_free,(unsigned char *) &free ,sizeof(struct free_bloc_s));
     if(free.size == 1){
+	res=super.first_free;
+	super.nb_free--;
 	super.first_free = free.next;
 	return res;
     }
+    res=super.first_free;
+    super.nb_free--;
     super.first_free++;
     free.size--;
-    write_nbloc(super.first_free,res,sizeof(struct free_bloc_s), (unsigned char *) &free);
+    write_nbloc(CURRENT_VOLUME,super.first_free,(unsigned char *) &free,sizeof(struct free_bloc_s));
     return res;
 }
 
 void free_bloc(unsigned int bloc){
+    struct free_bloc_s res;
     /*0 is allowed to superbloc*/
     if(!bloc){
 	printf("The superbloc can't be free!");
 	exit(EXIT_FAILURE);
     }
-    struct free_bloc_s res;
     res.size=1;
     res.next=super.first_free;
+    write_nbloc(CURRENT_VOLUME,bloc, (unsigned char *)&res, sizeof(struct free_bloc_s));
     super.first_free=bloc;
     super.nb_free++;
 }
@@ -58,9 +62,10 @@ void free_blocs(unsigned tbloc[], unsigned tsize){
     }
 }
 
-void new_bloc_zero(){
+unsigned new_bloc_zero(){
     int res;
     unsigned char buf[SECTORSIZE] = {0};
     res=new_bloc();
     write_bloc(CURRENT_VOLUME, res, buf);
+    return res;
 }

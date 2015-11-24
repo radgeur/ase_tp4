@@ -19,3 +19,5 @@ TP5, 6, 7 et 8 fusionnés
 -vérifier que le code écrit est utilisé
 
 -commentes ton code connard!
+
+export CURRENT_VOLUME=0 dans ton bashrc

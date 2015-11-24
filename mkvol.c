@@ -1,4 +1,4 @@
-#include "mbr.h"
+#include "inode.h"
 
 
 static void empty_it(){
@@ -17,8 +17,6 @@ void mbrvol(unsigned nbblocs, unsigned firstCylinder, unsigned firstSector);
 
 int main(){
     int i;
-    char *vol;
-    /*setenv("CURRENT_VOLUME", "0", 1);*/
     /* init hardware */
     if(init_hardware("hardware.ini") == 0) {
 	fprintf(stderr, "Error in hardware initialization\n");
@@ -32,9 +30,7 @@ int main(){
     /* Allows all IT */
     _mask(1);
     chk_hda();
-
-    /*vol = getenv("CURRENT_VOLUME");
-      printf("%i : current volume", *vol); */
+    printf("%i", CURRENT_VOLUME);
     mbrvol(4,1,7);
     mbrvol(12,4,3);
     dvol();
