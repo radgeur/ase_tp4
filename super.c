@@ -50,3 +50,17 @@ void free_bloc(unsigned int bloc){
     super.first_free=bloc;
     super.nb_free++;
 }
+
+void free_blocs(unsigned tbloc[], unsigned tsize){
+    int i;
+    for(i=0; i<tsize; i++){
+	free_bloc(tbloc[i]);
+    }
+}
+
+void new_bloc_zero(){
+    int res;
+    unsigned char buf[SECTORSIZE] = {0};
+    res=new_bloc();
+    write_bloc(CURRENT_VOLUME, res, buf);
+}

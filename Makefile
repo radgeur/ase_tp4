@@ -41,14 +41,17 @@ lib_hardware.o: lib_hardware.c
 mkvol.o: mkvol.c
 	$(CC) $(CFLAGS) -c mkvol.c $(INCDIR)
 
-mkvol: mkvol.o drive.o mbr.o super.o
-	$(CC) $(CFLAGS) -o mkvol  mkvol.o drive.o mbr.o super.o $(LIBS)
+mkvol: mkvol.o drive.o mbr.o
+	$(CC) $(CFLAGS) -o mkvol  mkvol.o drive.o mbr.o $(LIBS)
 
 mbr.o: mbr.c
 	$(CC) $(CFLAGS) -c mbr.c $(INCDIR)
 
 super.o: super.c
 	$(CC) $(CFLAGS) -c super.c $(INCDIR)
+
+inode.o: inode.c
+	$(CC) $(CFLAGS) -c inode.c $(INCDIR)
 
 ###------------------------------
 ### Misc.

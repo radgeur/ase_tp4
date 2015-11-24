@@ -24,7 +24,7 @@ extern void init_super();
 extern void save_super();
 extern int load_super();
 extern unsigned int new_bloc();
-/*extern unsigned int new_bloc_zero();*/
+extern unsigned int new_bloc_zero();
 extern void free_bloc(unsigned int bloc);
-/*extern void free_blocs(unsigned tbloc[], unsigned tsize);*/
+extern void free_blocs(unsigned tbloc[], unsigned tsize);
 #endif
