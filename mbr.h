@@ -8,7 +8,7 @@
 #define MBR_MAGIC 0xCAFEBABE
 #define NBSECTORPERCYLINDER 16
 
-static struct mbr_s mbr;
+struct mbr_s mbr;
 
 enum vol_type_e {STD, ANX, OTHER};
 
