@@ -4,24 +4,24 @@
 ROOTDIR=/home/enseign/ASE
 
 CC	= gcc
-CFLAGS	= -Wall -ansi -pedantic 
+CFLAGS	= -Wall -ansi -pedantic
 CFLAGS  += -g -m32
 LIBDIR  = $(ROOTDIR)/lib
 INCDIR  = -I$(ROOTDIR)/include
-LIBS    = -L$(LIBDIR) -lhardware 
+LIBS    = -L$(LIBDIR) -lhardware
 
 ###------------------------------
-### Main targets 
+### Main targets
 ###------------------------------------------------------------
-BINARIES= mkhd mkvol
+BINARIES= mkhd mkvol mknfs
 OBJECTS	= $(addsuffix .o,\
-	  mkhd mkvol)
+	  mkhd mkvol mknfs)
 
 all: realclean $(BINARIES) $(OBJECTS)
 
 
 ###------------------------------
-### Main rules 
+### Main rules
 ###------------------------------------------------------------
 ###--------------------------Hardware--------------------------
 mkhd.o: mkhd.c
@@ -41,8 +41,14 @@ lib_hardware.o: lib_hardware.c
 mkvol.o: mkvol.c
 	$(CC) $(CFLAGS) -c mkvol.c $(INCDIR)
 
-mkvol: mkvol.o drive.o mbr.o super.o inode.o
-	$(CC) $(CFLAGS) -o mkvol  mkvol.o drive.o mbr.o super.o inode.o $(LIBS)
+mkvol: mkvol.o drive.o mbr.o super.o
+	$(CC) $(CFLAGS) -o mkvol  mkvol.o drive.o mbr.o super.o $(LIBS)
+
+mknfs.o: mknfs.c
+	$(CC) $(CFLAGS) -c mknfs.c $(INCDIR)
+
+mknfs: mknfs.o mkvol.o drive.o mbr.o super.o
+	$(CC) $(CFLAGS) -o mknfs mknfs.o mkvol.o drive.o mbr.o super.o $(LIBS)
 
 mbr.o: mbr.c
 	$(CC) $(CFLAGS) -c mbr.c $(INCDIR)
@@ -50,14 +56,11 @@ mbr.o: mbr.c
 super.o: super.c
 	$(CC) $(CFLAGS) -c super.c $(INCDIR)
 
-inode.o: inode.c
-	$(CC) $(CFLAGS) -c inode.c $(INCDIR)
-
 ###------------------------------
 ### Misc.
 ###------------------------------------------------------------
 .PHONY: clean realclean depend
 clean:
 	$(RM) *.o $(BINARIES)
-realclean: clean 
+realclean: clean
 	$(RM) vdiskA.bin vdiskB.bin

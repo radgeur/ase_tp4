@@ -22,7 +22,7 @@ struct vol_s {
 struct mbr_s{
   struct vol_s mbr_vol[MAXVOL];
   unsigned mbr_nb_vol;
-  unsigned mbr_magic;	
+  unsigned mbr_magic;
 };
 
 extern int load_mbr();
