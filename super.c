@@ -1,9 +1,11 @@
 #include "super.h"
 
+/*save the super bloc */
 void save_super(){
     write_nbloc(CURRENT_VOLUME,SUPER, (unsigned char *) &super,sizeof(struct super_s));
 }
 
+/*initialize a super bloc*/
 void init_super(){
     struct free_bloc_s free;
     super.first_free=1;
@@ -15,11 +17,13 @@ void init_super(){
     write_nbloc(CURRENT_VOLUME,1,(unsigned char *) &free, sizeof(struct free_bloc_s));
 }
 
+/*load a super bloc*/
 int load_super(){
     read_nbloc(CURRENT_VOLUME,SUPER,(unsigned char *) &super, sizeof(struct super_s));
     return 1;
 }
 
+/*return a new free bloc*/
 unsigned int new_bloc(){
     unsigned res;
     struct free_bloc_s free;
@@ -41,6 +45,7 @@ unsigned int new_bloc(){
     return res;
 }
 
+/*free a bloc*/
 void free_bloc(unsigned int bloc){
     struct free_bloc_s res;
     /*0 is allowed to superbloc*/
@@ -55,6 +60,7 @@ void free_bloc(unsigned int bloc){
     super.nb_free++;
 }
 
+/*fre tsize bloc(s)*/
 void free_blocs(unsigned tbloc[], unsigned tsize){
     int i;
     for(i=0; i<tsize; i++){
@@ -62,6 +68,7 @@ void free_blocs(unsigned tbloc[], unsigned tsize){
     }
 }
 
+/*initialize a new bloc with all 0 inside*/
 unsigned new_bloc_zero(){
     int res;
     unsigned char buf[SECTORSIZE] = {0};

@@ -25,3 +25,15 @@ void dmps (int cylinder, int sector){
     /*Print the sector*/
     dump(buf,SECTORSIZE,1,0);
 }
+
+void empty_it(){
+  return;
+}
+
+void chk_hda(){
+  int sectorsize;
+  _out(HDA_CMDREG,CMD_DSKINFO);
+  sectorsize = (_in(HDA_DATAREGS+4) << 8) +  _in(HDA_DATAREGS+5);
+  assert(sectorsize==SECTORSIZE);
+}
+

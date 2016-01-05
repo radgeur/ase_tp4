@@ -10,20 +10,8 @@
    
 */
 
-#include <assert.h>
 #include "lib_hardware.h"
 
-
-static void empty_it(){
-    return;
-}
-
-void chk_hda(){
-    int sectorsize;
-    _out(HDA_CMDREG,CMD_DSKINFO);
-    sectorsize = (_in(HDA_DATAREGS+4) << 8) +  _in(HDA_DATAREGS+5);
-    assert(sectorsize==SECTORSIZE);
-}
 
 int main(int argc, char **argv)
 {
@@ -39,7 +27,7 @@ int main(int argc, char **argv)
     
     /* Interrupt handlers */
     for(i=0; i<16; i++)
-	IRQVECTOR[i] = empty_it;
+      IRQVECTOR[i] = empty_it;
 
     /* Allows all IT */
     _mask(1);

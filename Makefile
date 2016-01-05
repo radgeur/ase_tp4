@@ -13,7 +13,7 @@ LIBS    = -L$(LIBDIR) -lhardware
 ###------------------------------
 ### Main targets
 ###------------------------------------------------------------
-BINARIES= mkhd mkvol mknfs
+BINARIES= mkhd mknfs
 OBJECTS	= $(addsuffix .o,\
 	  mkhd mknfs)
 
@@ -44,14 +44,20 @@ mkvol.o: mkvol.c
 mknfs.o: mknfs.c
 	$(CC) $(CFLAGS) -c mknfs.c $(INCDIR)
 
-mknfs: mknfs.o mkvol.o drive.o mbr.o super.o
-	$(CC) $(CFLAGS) -o mknfs mknfs.o mkvol.o drive.o mbr.o super.o $(LIBS)
+mknfs: mknfs.o mkvol.o drive.o mbr.o super.o lib_hardware.o
+	$(CC) $(CFLAGS) -o mknfs mknfs.o mkvol.o drive.o mbr.o super.o lib_hardware.o $(LIBS)
 
 mbr.o: mbr.c
 	$(CC) $(CFLAGS) -c mbr.c $(INCDIR)
 
 super.o: super.c
 	$(CC) $(CFLAGS) -c super.c $(INCDIR)
+
+dfs.o: dfs.c
+	$(CC) $(CFLAGS) -c dfs.c $(INCDIR)
+
+dfs: dfs.o mkvol.o drive.o mbr.o super.o lib_hardware.o
+	$(CC) $(CFLAGS) -o dfs dfs.o mkvol.o drive.o mbr.o super.o lib_hardware.o $(LIBS)
 
 ###------------------------------
 ### Misc.

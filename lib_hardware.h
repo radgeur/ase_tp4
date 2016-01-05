@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <assert.h>
 #include "drive.h"
 #include "hardware.h"
 #define SECTORSIZE 256
@@ -14,5 +15,7 @@
 
 extern void dmps (int cylinder, int sector);
 extern void frmt ();
+extern void empty_it();
+extern void chk_hda();
 
 #endif
