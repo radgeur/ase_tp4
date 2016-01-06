@@ -21,6 +21,10 @@ void mbrvol(unsigned nbblocs, unsigned firstCylinder, unsigned firstSector){
     printf("the number of the cylinder or the sector is higher than the max number of cylinder or sector on the disk. number max of cylinder : %d, number max of sector : %d.", maxCylinder, maxSector);
     return;
   }
+  if(mbr.mbr_nb_vol >= MAXVOL){
+    printf("you cannot add an other volume on this disk");
+    return;
+  }
   vol.vol_first_sector=firstSector;
   vol.vol_first_cylinder=firstCylinder;
   vol.vol_nb_bloc=nbblocs;

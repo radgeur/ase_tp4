@@ -13,9 +13,9 @@ LIBS    = -L$(LIBDIR) -lhardware
 ###------------------------------
 ### Main targets
 ###------------------------------------------------------------
-BINARIES= mkhd mknfs
+BINARIES= mkhd mknfs dfs
 OBJECTS	= $(addsuffix .o,\
-	  mkhd mknfs)
+	  mkhd mknfs dfs)
 
 all: realclean $(BINARIES) $(OBJECTS)
 

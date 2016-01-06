@@ -42,6 +42,7 @@ unsigned int new_bloc(){
     super.first_free++;
     free.size--;
     write_nbloc(CURRENT_VOLUME,super.first_free,(unsigned char *) &free,sizeof(struct free_bloc_s));
+    /*printf("res = %d\n super.nb_free = %d\n super.first_free = %d\n free.size = %d\n",res, super.nb_free, super.first_free, free.size);*/
     return res;
 }
 
@@ -58,9 +59,10 @@ void free_bloc(unsigned int bloc){
     write_nbloc(CURRENT_VOLUME,bloc, (unsigned char *)&res, sizeof(struct free_bloc_s));
     super.first_free=bloc;
     super.nb_free++;
+    /*printf("res.next = %d\n super.first_free = %d\n super.nb_free = %d\n", res.next, super.first_free, super.nb_free);*/
 }
 
-/*fre tsize bloc(s)*/
+/*free tsize bloc(s)*/
 void free_blocs(unsigned tbloc[], unsigned tsize){
     int i;
     for(i=0; i<tsize; i++){
